@@ -1,5 +1,7 @@
 use Rex -feature => ['1.0'];
 
+set parallelism => "max";
+
 task "root", make {
 	my $user = run "whoami";
 
