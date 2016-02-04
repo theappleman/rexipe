@@ -34,6 +34,21 @@ task "shell", make {
 	}
 };
 
+desc "Install a package";
+task "install", make {
+	needs main "root" || die "Could not elevate privileges";
+	my $params = shift;
+	my $pkg = (defined($params->{pkg})) ? $params->{pkg} : die("No package given");
+
+	pkg $pkg, ensure => "latest";
+};
+
+desc "Update system packages";
+task "update", make {
+	needs main "root" || die "Could not gain root privileges";
+	update_system;
+};
+
 require Rex::Test;
 
 1;
