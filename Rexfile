@@ -50,5 +50,9 @@ task "update", make {
 };
 
 require Rex::Test;
+require web;
+require gluster;
+require docker;
+require mysql;
 
 1;
