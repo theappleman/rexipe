@@ -138,4 +138,40 @@ task "users", make {
 	}
 };
 
+use Rex::Commands::Sync;
+use POSIX qw(strftime);
+desc "Copy vhost data down to host";
+task "sync_down", make {
+	needs main "root" || die "Could not elevate privileges";
+	my $date = strftime "%F", localtime;
+	my $srv = connection->server;
+	LOCAL {
+		file $srv,
+			ensure => "directory";
+		file join("/", ($srv, $date)),
+			ensure => "directory";
+		file join("/", ($srv, $date, "vhosts")),
+			ensure => "directory";
+	};
+	sync_down "/var/www/vhosts",
+		join("/", ($srv, $date, "vhosts"));
+};
+
+use Rex::Commands::Rsync;
+task "rsync", make {
+	needs main "root" || die "Could not elevate privileges";
+	my $date = strftime "%F", localtime;
+	my $srv = connection->server;
+	LOCAL {
+		file $srv,
+			ensure => "directory";
+		file join("/", ($srv, $date)),
+			ensure => "directory";
+		file join("/", ($srv, $date, "vhosts")),
+			ensure => "directory";
+	};
+	sync "/var/www/vhosts",
+		join("/", ($srv, $date, "vhosts"));
+};
+
 1;
