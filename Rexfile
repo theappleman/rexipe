@@ -54,5 +54,6 @@ require web;
 require gluster;
 require docker;
 require mysql;
+require rax;
 
 1;
